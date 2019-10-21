@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private String greeting = "Hello from RxJava";
     private Observable<String> myObservable;
     private Observer<String> myObserver;
+    private Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSubscribe(Disposable d) {
                Log.d(TAG, "onSubsribe invoked");
+               disposable = d;
             }
 
             @Override
@@ -51,5 +53,12 @@ public class MainActivity extends AppCompatActivity {
         };
 
         myObservable.subscribe(myObserver);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.dispose();
     }
 }
