@@ -9,14 +9,15 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
     private String greeting = "Hello from RxJava";
     private Observable<String> myObservable;
-    private Observer<String> myObserver;
-    private Disposable disposable;
+    private DisposableObserver<String> myObserver;
+    //private Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
         myObservable.observeOn(AndroidSchedulers.mainThread());
 
-        myObserver = new Observer<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-               Log.d(TAG, "onSubsribe invoked");
-               disposable = d;
-            }
 
+        myObserver = new DisposableObserver<String>() {
             @Override
             public void onNext(String s) {
                 Log.d(TAG, "onNext invoked");
@@ -59,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disposable.dispose();
+        //disposable.dispose();
+        myObserver.dispose();
     }
 }
