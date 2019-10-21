@@ -7,7 +7,9 @@ import android.util.Log;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
@@ -21,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myObservable = Observable.just(greeting);
+
+        myObservable.subscribeOn(Schedulers.io());
+
+        myObservable.observeOn(AndroidSchedulers.mainThread());
 
         myObserver = new Observer<String>() {
             @Override
