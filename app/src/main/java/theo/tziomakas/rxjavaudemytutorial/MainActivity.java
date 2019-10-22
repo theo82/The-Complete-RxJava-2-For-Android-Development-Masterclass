@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -17,6 +18,12 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+
+
+/**
+ * Flatmap operator transforms the emmited items from an Observable into Observables, then
+ * flattens the emmissions from those into a single Observale.
+ */
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
@@ -47,13 +54,18 @@ public class MainActivity extends AppCompatActivity {
         myObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Function<Student, Student>() {
+                .flatMap(new Function<Student, ObservableSource<Student>>() {
                     @Override
-                    public Student apply(Student student) throws Exception {
+                    public ObservableSource<Student> apply(Student student) throws Exception {
+
+                        Student student1 = new Student();
+                        student1.setName(student.getName());
+
+                        Student student2 = new Student();
+                        student2.setName(student.getName());
 
                         student.setName(student.getName().toUpperCase());
-
-                        return student;
+                        return Observable.just(student,student1,student2);
                     }
                 })
                 .subscribeWith(getObserver())
