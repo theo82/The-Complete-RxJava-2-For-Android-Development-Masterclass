@@ -14,6 +14,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -46,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
         myObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<Student, Student>() {
+                    @Override
+                    public Student apply(Student student) throws Exception {
+
+                        student.setName(student.getName().toUpperCase());
+
+                        return student;
+                    }
+                })
                 .subscribeWith(getObserver())
         );
 
@@ -56,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         myObserver = new DisposableObserver<Student>() {
             @Override
             public void onNext(Student s) {
-                Log.d(TAG, "onNext invoked" + s.getEmail());
+                Log.d(TAG, s.getName());
             }
 
             @Override
@@ -77,31 +87,31 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Student> students = new ArrayList<>();
 
         Student student1 = new Student();
-        student1.setName(" student1 ");
+        student1.setName(" student 1 ");
         student1.setEmail( " student1@gmail.com ");
         student1.setAge(27);
         students.add(student1);
 
         Student student2 = new Student();
-        student2.setName(" student2 ");
+        student2.setName(" student 2 ");
         student2.setEmail( " student2@gmail.com ");
         student2.setAge(27);
         students.add(student2);
 
         Student student3 = new Student();
-        student3.setName(" student3 ");
+        student3.setName(" student 3 ");
         student3.setEmail( " student3@gmail.com ");
         student3.setAge(27);
         students.add(student3);
 
         Student student4 = new Student();
-        student4.setName(" student4 ");
+        student4.setName(" student 4 ");
         student4.setEmail( " student4@gmail.com ");
         student4.setAge(27);
         students.add(student4);
 
         Student student5 = new Student();
-        student5.setName(" student5 ");
+        student5.setName(" student 5 ");
         student5.setEmail( " student5@gmail.com ");
         student5.setAge(27);
         students.add(student4);
