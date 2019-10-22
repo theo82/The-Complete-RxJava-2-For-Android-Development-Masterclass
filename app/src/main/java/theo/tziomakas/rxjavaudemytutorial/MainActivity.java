@@ -15,9 +15,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
-    private String[] greetings = {"Hello A","Hello B","Hello C"};
-    private Observable<String> myObservable;
-    private DisposableObserver<String> myObserver;
+    private Integer[] greetings = {1,2,3,4,5};
+    private Observable<Integer> myObservable;
+    private DisposableObserver<Integer> myObserver;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     DisposableObserver getObserver(){
 
-        myObserver = new DisposableObserver<String>() {
+        myObserver = new DisposableObserver<Integer>() {
             @Override
-            public void onNext(String s) {
+            public void onNext(Integer s) {
                 Log.d(TAG, "onNext invoked" + s);
             }
 
