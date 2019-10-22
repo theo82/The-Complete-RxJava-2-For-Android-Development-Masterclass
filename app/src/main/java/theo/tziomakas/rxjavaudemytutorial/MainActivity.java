@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
-    //private String greetings = "Hello A,Hello B,Hello C";
+    private String[] greetings = {"Hello A","Hello B","Hello C"};
     private Observable<String> myObservable;
     private DisposableObserver<String> myObserver;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myObservable = Observable.just("Hello A","Hello B","Hello C");
+        myObservable = Observable.fromArray(greetings);
 
         compositeDisposable.add(
         myObservable
