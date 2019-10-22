@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         myObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<Student, ObservableSource<Student>>() {
+                .concatMap(new Function<Student, ObservableSource<Student>>() {
                     @Override
                     public ObservableSource<Student> apply(Student student) throws Exception {
 
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                         student2.setName(student.getName());
 
                         student.setName(student.getName().toUpperCase());
-                        return Observable.just(student,student1,student2);
+                        return Observable.just(student, student1, student2);
                     }
                 })
                 .subscribeWith(getObserver())
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         student5.setName(" student 5 ");
         student5.setEmail( " student5@gmail.com ");
         student5.setAge(27);
-        students.add(student4);
+        students.add(student5);
 
         return students;
     }
