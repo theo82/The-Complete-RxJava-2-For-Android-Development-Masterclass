@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myObservable = Observable.fromArray(greetings);
+        myObservable = Observable.range(0,20);
 
         compositeDisposable.add(
         myObservable
