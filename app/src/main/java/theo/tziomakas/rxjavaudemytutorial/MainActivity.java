@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(new Observer<List<Integer>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        
                     }
 
                     @Override
