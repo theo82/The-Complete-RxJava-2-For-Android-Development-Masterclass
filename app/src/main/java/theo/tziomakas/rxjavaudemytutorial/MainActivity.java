@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 /**
- * Emit only those items from an Observable that pass a predicate test
+ * Suppress duplicated items emitted by an Observable
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -37,17 +37,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Observable<Integer> myObservable = Observable.range(1,20);
+        Observable<Integer> myObservable = Observable.just(1,2,3,7,5,3,5,5,4,4);
 
         myObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(new Predicate<Integer>() {
-                    @Override
-                    public boolean test(Integer integer) throws Exception {
-                        return integer%3 == 0;
-                    }
-                })
+                .distinct()
                 .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
