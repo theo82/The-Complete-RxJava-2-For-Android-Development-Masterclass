@@ -17,13 +17,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
 /**
- * Periodically gather items emitted by an Observable into bundles and emit
- * these bundles rather that emitting the items one at a time.
+ * Emit only those items from an Observable that pass a predicate test
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -39,22 +39,24 @@ public class MainActivity extends AppCompatActivity {
 
         Observable<Integer> myObservable = Observable.range(1,20);
 
-        myObservable.subscribeOn(Schedulers.io())
+        myObservable
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .buffer(4)
-                .subscribe(new Observer<List<Integer>>() {
+                .filter(new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer integer) throws Exception {
+                        return integer%3 == 0;
+                    }
+                })
+                .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        
+
                     }
 
                     @Override
-                    public void onNext(List<Integer> integers) {
-                        Log.i(TAG," Came to onNext ");
-
-                        for(Integer i:integers){
-                            Log.i(TAG, " int value is: " + i);
-                        }
+                    public void onNext(Integer integer) {
+                        Log.i(TAG, "onNext invoked: " + integer);
                     }
 
                     @Override
@@ -73,11 +75,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //disposable.dispose();
-        //compositeDisposable.clear();
-    }
 }
