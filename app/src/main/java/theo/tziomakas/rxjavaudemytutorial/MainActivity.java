@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 /**
- * Suppress duplicated items emitted by an Observable
+ * Suppress the first n-items emitted by an Observable
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -42,11 +42,10 @@ public class MainActivity extends AppCompatActivity {
         myObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .distinct()
+                .skip(6)
                 .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
