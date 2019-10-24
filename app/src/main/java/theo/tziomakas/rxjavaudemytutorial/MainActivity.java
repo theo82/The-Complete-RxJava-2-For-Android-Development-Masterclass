@@ -11,10 +11,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.AsyncSubject;
+import io.reactivex.subjects.PublishSubject;
 
 /**
- * Async Subject only emmits the last value of the source Observable
- * only after that source Observable completes.
+ * Async Subject emmits all the subsequent items
+ * of the Observable at the time of subscription.
  */
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
@@ -24,31 +25,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        asyncSubjectDemo1();
+        doSomeWork();
     }
 
-    public void asyncSubjectDemo1(){
-        Observable<String> observable = Observable.just("JAVA","KOTLIN","XML","JSON");
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    private void doSomeWork(){
+        PublishSubject<Integer> source = PublishSubject.create();
 
-        AsyncSubject<String> asyncSubject = AsyncSubject.create();
-        observable.subscribe(asyncSubject);
+        source.subscribe(getFirstObserver());
 
-        asyncSubject.subscribe(getFirstObserver());
-        asyncSubject.subscribe(getSecondObserver());
-        asyncSubject.subscribe(getThirdObserver());
+        source.onNext(1);
+        source.onNext(2);
+        source.onNext(3);
+
+        source.subscribe(getSecondObserver());
+
+        source.onNext(4);
+
+        source.onComplete();
     }
 
-    private Observer<String> getFirstObserver(){
-        Observer<String> observer = new Observer<String>() {
+    private Observer<Integer> getFirstObserver(){
+        Observer<Integer> observer = new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.d(TAG, "First Observer onSubscribe");
             }
 
             @Override
-            public void onNext(String s) {
-                Log.d(TAG, "First Observer onNext: " + s);
+            public void onNext(Integer s) {
+                Log.d(TAG, "First Observer onNext value: " + s);
             }
 
             @Override
@@ -65,16 +70,16 @@ public class MainActivity extends AppCompatActivity {
         return observer;
     }
 
-    private Observer<String> getSecondObserver(){
-        Observer<String> observer = new Observer<String>() {
+    private Observer<Integer> getSecondObserver(){
+        Observer<Integer> observer = new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.d(TAG, "Second Observer onSubscribe");
             }
 
             @Override
-            public void onNext(String s) {
-                Log.d(TAG, "Second Observer onNext" + s);
+            public void onNext(Integer s) {
+                Log.d(TAG, "Second Observer onNext value: " + s);
             }
 
             @Override
@@ -91,29 +96,5 @@ public class MainActivity extends AppCompatActivity {
         return observer;
     }
 
-    private Observer<String> getThirdObserver(){
-        Observer<String> observer = new Observer<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                Log.d(TAG, "Third Observer onSubscribe");
-            }
 
-            @Override
-            public void onNext(String s) {
-                Log.d(TAG, "Third Observer onNext" + s);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "Third Observer onError");
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "Third Observer onComplete");
-            }
-        };
-
-        return observer;
-    }
 }
