@@ -23,14 +23,11 @@ import io.reactivex.schedulers.Schedulers;
 
 
 /**
- * Suppress the first n-items emitted by an Observable
+ * Suppress the final n items emitted by an Observable
  */
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         myObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .skip(6)
+                .skipLast(6)
                 .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
