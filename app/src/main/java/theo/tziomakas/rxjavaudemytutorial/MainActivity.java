@@ -12,10 +12,16 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.AsyncSubject;
 import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.ReplaySubject;
 
 /**
+<<<<<<< Updated upstream
  * Async Subject emmits all the subsequent items
  * of the Observable at the time of subscription.
+=======
+ * ReplaySubject emits all the items of the source Observable,
+ * regardless of when the subscriber subscribes.
+>>>>>>> Stashed changes
  */
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
@@ -29,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doSomeWork(){
-        PublishSubject<Integer> source = PublishSubject.create();
+        ReplaySubject<Integer> source = ReplaySubject.create().create();
 
         source.subscribe(getFirstObserver());
 
